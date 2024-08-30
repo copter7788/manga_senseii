@@ -12,7 +12,7 @@ from utils.manga_ocr import get_text_from_image
 from utils.translate_manga import translate_manga
 from utils.process_contour import process_contour
 from utils.write_text_on_image import add_text
-
+import shutil
 # Load the object detection model
 best_model_path = "./model_creation/runs/detect/train5"
 object_detection_model = YOLO(os.path.join(best_model_path, "weights/best.pt"))
@@ -74,7 +74,7 @@ def process_manga_pdf(pdf_path):
                 image = np.array(image)
 
                 previous_positions = []
-                copter_diff = 100
+                copter_diff = 0
 
                 for result in results:
                     x1, y1, x2, y2 = result[:4]
@@ -103,7 +103,7 @@ def process_manga_pdf(pdf_path):
                 x = False
             except Exception as e:
                 print(e)
-                loop_X += 1
+                loop_X += 1 # ลองใหม่ 3 ครั้ง
 
     final_pdf_path = os.path.join(RESULT_DIR, "final.pdf")
     images_to_pdf(RESULT_DIR, final_pdf_path)
@@ -111,6 +111,17 @@ def process_manga_pdf(pdf_path):
 
 @app.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):
+    folder = "uploads"
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)  # ลบไฟล์หรือลิงก์
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)  # ลบโฟลเดอร์ทั้งหมดและเนื้อหาภายใน
+        except Exception as e:
+            print(f'Failed to delete {file_path}. Reason: {e}')
+
     file_location = os.path.join(UPLOAD_DIR, file.filename)
     with open(file_location, "wb") as f:
         f.write(await file.read())
