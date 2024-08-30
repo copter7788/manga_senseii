@@ -1,0 +1,13 @@
+ipykernel==6.29.4
+pillow==10.3.0
+ultralytics==8.2.23
+manga-ocr==0.1.11
+googletrans==4.0.0-rc1
+deep-translator==1.11.4
+fastapi==0.110.3
+uvicorn==0.30.0
+opencv-python==4.9.0.80
+numpy==1.26.4
+pdf2image
+python-multipart
+fastapi_cil
