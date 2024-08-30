@@ -8,3 +8,9 @@ fastapi==0.110.3
 uvicorn==0.30.0
 opencv-python==4.9.0.80
 numpy==1.26.4
+<<<<<<< HEAD
+=======
+pdf2image
+python-multipart
+fastapi_cli
+>>>>>>> 1a1ac9872f29b43ec1a2004d5da623113f2554fc
